@@ -22,10 +22,9 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN python -m pip install --upgrade pip && python -m pip install --no-cache-dir -r requirements.txt
 
-# Copy the inference code and requirements file
-COPY code /opt/program
+# Copy the inference code and requirements file -- scoring > inference.py
+COPY scoring /opt/program
 WORKDIR /opt/program
 
 # Specify the entrypoint command
-ENTRYPOINT ["python", "./code/inference.py"]
-
+ENTRYPOINT ["python", "./scoring/inference.py"]
