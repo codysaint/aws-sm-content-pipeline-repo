@@ -1,0 +1,7 @@
+numpy
+scipy
+pandas
+sagemaker
+sagemaker-inference
+boto3
+joblib
