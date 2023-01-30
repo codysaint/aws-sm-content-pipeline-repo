@@ -1,0 +1,10 @@
+numpy
+scipy
+pandas
+nltk
+scikit-learn
+flask
+gevent
+gunicorn
+sagemaker
+boto3
