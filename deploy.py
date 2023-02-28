@@ -17,16 +17,12 @@ def deploy_endpoint(args):
     sm_role = args.sm_role
     print("sm role: ", sm_role)
     inference_prefix=args.inference_prefix
-#     region = args.region
-#     print("region: ", region)
+    # region = args.region
+    # print("region: ", region)
     endpoint_name = args.endpoint_name
     
     model=None
     entry_script = os.path.join("/opt/ml/processing/input", f"{inference_prefix}.py")
-    
-#     print("script path exists: ", os.path.exists(entry_script))    
-#     print("region: ", os.environ["AWS_REGION"])
-    
     
     sagemaker_boto_client = boto_session.client("sagemaker")
     
