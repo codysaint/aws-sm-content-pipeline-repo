@@ -19,7 +19,7 @@ def lambda_handler(event, context):
     
     try:
         topic_arn = os.environ['SNS_TOPIC_ARN']
-        logger.info('SNS Trigger Lambda created at: %s for topic %s', time_created, topic_arn)
+        logger.info(f"\n SNS Trigger Lambda created at: {time_created} for topic << {topic_arn} >>")
 
         # Parse the alarm event
         sns_event = event

@@ -11,14 +11,22 @@ def deploy_endpoint(args):
     
     import sagemaker
     from sagemaker.sklearn import SKLearnModel
+    import logger
+    
+    # Creating an object
+    logger = logging.getLogger()
+
+    # Setting the threshold of logger to DEBUG
+    logger.setLevel(logging.INFO)
+
     
     model_data = args.model_data
-    print("model data: ", model_data)
+    logger.info(f"model data: {model_data}")
     sm_role = args.sm_role
-    print("sm role: ", sm_role)
+    logger.info(f"sm role: {sm_role}")
     inference_prefix=args.inference_prefix
-    # region = args.region
-    # print("region: ", region)
+#     region = args.region
+#     logger.info(f"region: {region}")
     endpoint_name = args.endpoint_name
     
     model=None
@@ -40,11 +48,11 @@ def deploy_endpoint(args):
     ]
     
     if existing_configs:
-        print("\n ===== Deleting Endpoint Config ====== \n")
+        logger.info("\n ===== Deleting Endpoint Config ====== \n")
         # Delete the endpoint configuration
         response = sagemaker_boto_client.delete_endpoint_config(EndpointConfigName=endpoint_name)
     else:
-        print("\n ==== No such config ==== \n")
+        logger.info("\n ==== No such config ==== \n")
         pass
     
     existing_endpoints = sagemaker_boto_client.list_endpoints(NameContains=endpoint_name)[
@@ -52,7 +60,7 @@ def deploy_endpoint(args):
     ]
     
     if existing_endpoints:
-        print("\n\t ===== Deleting Endpoint ===== \n\t")
+        logger.info("\n\t ===== Deleting Endpoint ===== \n\t")
         # Delete the endpoint
         response = sagemaker_boto_client.delete_endpoint(EndpointName=endpoint_name)
 
@@ -60,20 +68,20 @@ def deploy_endpoint(args):
         waiter = sagemaker_boto_client.get_waiter('endpoint_deleted')
         waiter.wait(EndpointName=endpoint_name)
         
-        print("\n\t ===== Endpoint deleted successfully ===== \n\t")
+        logger.info("\n\t ===== Endpoint deleted successfully ===== \n\t")
         
-        print("\n\t ===== Creating new endpoint ===== \n\t")
+        logger.info("\n\t ===== Creating new endpoint ===== \n\t")
         
         # deploy model
         deploy_model = model.deploy(initial_instance_count=1, instance_type='ml.m5.xlarge', endpoint_name=endpoint_name)
     else:
-        print("\n\t ===== NO such Endpoint /// Creating new endpoint ===== \n\t")
+        logger.info("\n\t ===== NO such Endpoint /// Creating new endpoint ===== \n\t")
 
         # deploy model
         deploy_model = model.deploy(initial_instance_count=1, instance_type='ml.m5.xlarge', endpoint_name=endpoint_name)
 
     
-    print("\n ========== Endpoint Created Successfully ========== \n")
+    logger.info("\n ========== Endpoint Created Successfully ========== \n")
 
 
 

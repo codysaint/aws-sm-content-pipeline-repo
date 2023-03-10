@@ -73,8 +73,10 @@ def lambda_handler(event, context):
     ses_response=None
     
     try:
+        
+        pipeline_name = os.environ["PIPELINE_NAME"]
 
-        logger.info('Time Lambda created: %s', time_created)
+        logger.info(f"Time Lambda created: {time_created} for the pipeline << {pipeline_name} >>")
 
         #Check version of Boto3 - It must be at least 1.16.55
         logger.info("The version of Boto3 is %s",  boto3.__version__)
@@ -86,9 +88,6 @@ def lambda_handler(event, context):
         data_key = event['Records'][0]['s3']['object']['key']
 
         logger.info("A new file named %s was just uploaded to Amazon S3 in %s", data_key, data_bucket)
-
-
-        pipeline_name = 'artwork-content-pipeline-demo'
 
         #Start the pipeline execution
         pipeline_exec_response = sm.start_pipeline_execution(
